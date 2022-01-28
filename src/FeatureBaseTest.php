@@ -4,12 +4,12 @@ namespace Jandrodev\Laratest;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
-use PHPUnit\Framework\Exception;
+use Jandrodev\Laratest\Auth\Authentication;
 use Tests\TestCase;
 
 class FeatureBaseTest extends TestCase
 {
-    use RefreshDatabase;
+    use Authentication, RefreshDatabase;
 
     /**
      * @param $model
@@ -32,34 +32,5 @@ class FeatureBaseTest extends TestCase
     public function createModels($model, int $count = 1, array $attributes = []): Collection
     {
         return $model::factory()->count($count)->create($attributes);
-    }
-
-    /**
-     * @param array $attributes
-     *
-     * @return mixed
-     */
-    public function createUser(array $attributes = [])
-    {
-        $userModel = config('laratest.user_model');
-
-        if (is_null($userModel)) {
-            throw new Exception('You will publish the config file and check the User model namespace !');
-        }
-
-        return $userModel::factory()->create($attributes);
-    }
-
-    /**
-     * @param array $attributes
-     *
-     * @return mixed
-     */
-    public function authUser(array $attributes = [])
-    {
-        $user = $this->createUser($attributes);
-        $this->actingAs($user);
-
-        return $user;
     }
 }
